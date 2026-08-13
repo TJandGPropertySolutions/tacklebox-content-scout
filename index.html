@@ -1,0 +1,412 @@
+<title>Tacklebox Content Scout</title>
+<style>
+  @font-face {
+    font-family: 'Tackle Condensed';
+    src: local('Arial Narrow Bold'), local('Arial Narrow');
+  }
+
+  :root {
+    --bg: #EDE6D6;
+    --bg-elevated: #F8F3E8;
+    --ink: #16262B;
+    --ink-soft: #536664;
+    --accent: #C1502E;
+    --accent-2: #B87F24;
+    --teal: #2F6F6B;
+    --line: #D9CDB0;
+    --hole: #EDE6D6;
+    --shadow: 220 25% 10%;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0F1E22;
+      --bg-elevated: #16292E;
+      --ink: #EFE7D8;
+      --ink-soft: #93A9A4;
+      --accent: #E2704A;
+      --accent-2: #E3AA4C;
+      --teal: #5CACA2;
+      --line: #24393E;
+      --hole: #0F1E22;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1E22;
+    --bg-elevated: #16292E;
+    --ink: #EFE7D8;
+    --ink-soft: #93A9A4;
+    --accent: #E2704A;
+    --accent-2: #E3AA4C;
+    --teal: #5CACA2;
+    --line: #24393E;
+    --hole: #0F1E22;
+  }
+  :root[data-theme="light"] {
+    --bg: #EDE6D6;
+    --bg-elevated: #F8F3E8;
+    --ink: #16262B;
+    --ink-soft: #536664;
+    --accent: #C1502E;
+    --accent-2: #B87F24;
+    --teal: #2F6F6B;
+    --line: #D9CDB0;
+    --hole: #EDE6D6;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100%;
+  }
+
+  a { color: inherit; }
+
+  .page {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 0 0 48px;
+  }
+
+  header.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 20px 16px;
+    background: linear-gradient(180deg, var(--bg) 78%, transparent);
+  }
+
+  .hook-mark { flex: none; color: var(--accent); }
+  .hook-mark svg { display: block; width: 30px; height: 34px; }
+
+  .brand { flex: 1; min-width: 0; }
+  .brand .word {
+    font-family: 'Tackle Condensed', Arial, sans-serif;
+    font-weight: 800;
+    font-stretch: condensed;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    font-size: 22px;
+    line-height: 1;
+    margin: 0;
+  }
+  .brand .sub {
+    margin: 4px 0 0;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+  }
+
+  .live {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal);
+    font-variant-numeric: tabular-nums;
+  }
+  .live .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--teal) 60%, transparent);
+    animation: pulse 2.4s ease-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .live .dot { animation: none; }
+  }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--teal) 45%, transparent); }
+    70%  { box-shadow: 0 0 0 7px color-mix(in srgb, var(--teal) 0%, transparent); }
+    100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--teal) 0%, transparent); }
+  }
+
+  main { padding: 4px 20px 0; }
+
+  #entries {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .card {
+    position: relative;
+    background: var(--bg-elevated);
+    border: 1px solid var(--line);
+    padding: 16px 18px 15px;
+    clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--hole);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+
+  .card.fresh { border-color: var(--accent); }
+
+  .card-eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--accent);
+    padding: 3px 7px;
+  }
+  .ts {
+    font-family: "SFMono-Regular", Consolas, "Roboto Mono", monospace;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .card-title {
+    margin: 0 0 6px;
+    font-size: 17.5px;
+    line-height: 1.28;
+    font-weight: 750;
+    text-wrap: balance;
+  }
+
+  .card-hook {
+    margin: 0 0 10px;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--ink);
+    opacity: 0.92;
+    max-width: 65ch;
+  }
+
+  .card-source {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--accent-2);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent-2) 45%, transparent);
+  }
+  .card-source:focus-visible,
+  a:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+  }
+
+  .empty {
+    padding: 28px 18px;
+    text-align: left;
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.6;
+    border: 1px dashed var(--line);
+  }
+  .empty strong { color: var(--ink); }
+
+  footer.note {
+    margin-top: 28px;
+    padding: 0 20px;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+</style>
+
+<div class="page">
+  <header class="topbar">
+    <span class="hook-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2V15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="12" cy="2.6" r="1.8" fill="currentColor"/>
+        <path d="M12 15c0 5 7 5.5 7 1 0-3-3-3.6-3-1 0 2.4 2.6 3.2 2.6 6.6 0 2.7-2.4 4.4-4.9 3.7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <div class="brand">
+      <p class="word">Tacklebox</p>
+      <p class="sub">Content Scout</p>
+    </div>
+    <span class="live"><span class="dot"></span>Every 30 min</span>
+  </header>
+
+  <main>
+    <div id="entries">
+      <!-- ENTRIES:START -->
+      <article class="card fresh">
+        <div class="card-eyebrow">
+          <span class="badge">Fresh catch</span>
+          <time class="ts">Thu 2:38 PM</time>
+        </div>
+        <h2 class="card-title">"World stop / carry on" transformation trend running hot on TikTok</h2>
+        <p class="card-hook">Custom audio by creator Lerato P — 1.8M+ posts under #worldstopcarryon. The audio pauses on "world stop" to cue a fast hair/makeup or outfit change, then "carry on" reveals the new look.</p>
+        <a class="card-source" href="https://clipchamp.com/en/blog/tiktok-trends-challenges/" target="_blank" rel="noopener">Clipchamp ↗</a>
+        <a class="card-source" href="https://www.tiktok.com/@jenagoldsack/video/7625485385056947478" target="_blank" rel="noopener">@jenagoldsack ↗</a>
+      </article>
+      <article class="card">
+        <div class="card-eyebrow">
+          <span class="ts">Wed 9:01 PM</span>
+        </div>
+        <h2 class="card-title">"My Favorite Person" trend is spreading on TikTok this week</h2>
+        <p class="card-hook">Someone hands their phone to a loved one to hold, then talks about why that person is their favorite — secretly flipping the camera onto them without warning so their real, unscripted reaction is what gets recorded.</p>
+        <a class="card-source" href="https://www.yahoo.com/news/videos/favorite-person-trend-making-social-004217885.html" target="_blank" rel="noopener">Yahoo News ↗</a>
+        <a class="card-source" href="https://www.threads.com/@areyoubeingnosey/post/Dbzb4J8DYSj/i-love-the-my-favorite-person-trend-on-tik-tok/" target="_blank" rel="noopener">@areyoubeingnosey ↗</a>
+      </article>
+      <!--
+        CARD TEMPLATE — read this before editing.
+        On every run: build ONE new <article> block below using the exact
+        markup pattern shown here, filled in with this run's pick, and
+        insert it as the FIRST child right after "ENTRIES:START".
+        Remove class="fresh" and the FRESH CATCH badge from whatever was
+        previously the first card (it's no longer the newest).
+        After inserting, keep only the newest 24 cards total — delete
+        older ones off the bottom so the page doesn't grow forever.
+        If this is the very first real entry, also delete the .empty
+        placeholder card below.
+
+        <article class="card fresh">
+          <div class="card-eyebrow">
+            <span class="badge">Fresh catch</span>
+            <time class="ts">{{DAY, e.g. Wed}} {{H:MM AM/PM local}}</time>
+          </div>
+          <h2 class="card-title">{{What's trending, one punchy line}}</h2>
+          <p class="card-hook">{{The content angle/hook for Tacklebox}}</p>
+          <a class="card-source" href="{{source URL}}" target="_blank" rel="noopener">{{short source label}} ↗</a>
+        </article>
+      -->
+      <article class="card">
+        <div class="card-eyebrow">
+          <time class="ts">Wed 8:31 PM</time>
+        </div>
+        <h2 class="card-title">A couples "walk and lift" trend is spreading on TikTok this month</h2>
+        <p class="card-hook">Filmed from behind while walking, one partner suddenly lifts the other off their feet mid-stride, often slowed down for the moment — it's spread across Russian, Ukrainian, Spanish, Arabic, Turkish, Indonesian, and Portuguese tags but hasn't picked up mainstream news coverage yet.</p>
+        <a class="card-source" href="https://newengen.com/insights/august-tiktok-trends/" target="_blank" rel="noopener">newengen.com ↗</a>
+        <a class="card-source" href="https://www.tiktok.com/@jennacompono/video/7459952743571000619" target="_blank" rel="noopener">@jennacompono ↗</a>
+        <a class="card-source" href="https://www.tiktok.com/@amelie_184/video/7447251439967079702" target="_blank" rel="noopener">@amelie_184 ↗</a>
+        <a class="card-source" href="https://www.tiktok.com/@surya_anjali/video/7412062296819731742" target="_blank" rel="noopener">@surya_anjali ↗</a>
+      </article>
+      <article class="card">
+        <div class="card-eyebrow">
+          <span class="ts">Wed 8:01 PM</span>
+        </div>
+        <h2 class="card-title">Spider-Man ceiling trend is spreading fast on TikTok right now</h2>
+        <p class="card-hook">An upside-down, stuck-to-the-ceiling Miles Morales-style edit (mostly done in CapCut), tied back to creator Piper Rockelle — a wave of tutorial and recreation videos has posted in just the last day or so, with no mainstream news coverage yet.</p>
+        <a class="card-source" href="https://www.tiktok.com/discover/spiderman-ceiling-trend-explained" target="_blank" rel="noopener">TikTok trend page ↗</a>
+        <a class="card-source" href="https://www.tiktok.com/@tears9398/video/7670955506437016845" target="_blank" rel="noopener">@tears9398 ↗</a>
+        <a class="card-source" href="https://www.tiktok.com/@zjyx4avba6/video/7670945425670655252" target="_blank" rel="noopener">@zjyx4avba6 ↗</a>
+        <a class="card-source" href="https://www.tiktok.com/@jmen.vtzu/video/7671122687263116575" target="_blank" rel="noopener">@jmen.vtzu ↗</a>
+        <a class="card-source" href="https://www.tiktok.com/@ian406542/video/7671283312354151710" target="_blank" rel="noopener">@ian406542 ↗</a>
+      </article>
+      <article class="card">
+        <div class="card-eyebrow">
+          <span class="ts">Wed 7:31 PM</span>
+        </div>
+        <h2 class="card-title">"Petal Chair Choreo" is spreading on TikTok</h2>
+        <p class="card-hook">Creators hop chair to chair recreating the sharp waiting-room choreography from Ariana Grande's music video for "Petal," the title track off her album that dropped July 31, 2026 — some do it as a straight dance cover, others use each chair landing as an outfit-change cut.</p>
+        <a class="card-source" href="https://newengen.com/insights/august-tiktok-trends/" target="_blank" rel="noopener">newengen.com ↗</a>
+        <a class="card-source" href="https://www.tiktok.com/@arianagrande/video/7667549178033212702" target="_blank" rel="noopener">@arianagrande (original) ↗</a>
+        <a class="card-source" href="https://www.tiktok.com/@forevermorecherie/video/7668739523316059414" target="_blank" rel="noopener">@forevermorecherie ↗</a>
+        <a class="card-source" href="https://www.tiktok.com/@paco_rayane/video/7671266337108315424" target="_blank" rel="noopener">@paco_rayane ↗</a>
+      </article>
+      <article class="card">
+        <div class="card-eyebrow">
+          <span class="ts">Wed 6:31 PM</span>
+        </div>
+        <h2 class="card-title">Jon Hamm "eyes closed" dancing meme still running on TikTok</h2>
+        <p class="card-hook">A slow-motion clip of Jon Hamm dancing with his eyes closed in a club scene from Apple TV+'s Your Friends &amp; Neighbors, set to "Turn the Lights Off" by Kato ft. Jon Nørgaard — people stitch themselves closing their eyes before cutting to Hamm's dance.</p>
+        <a class="card-source" href="https://knowyourmeme.com/memes/jon-hamm-dancing-in-the-club-scene-turn-the-lights-off-trend" target="_blank" rel="noopener">Know Your Meme ↗</a>
+        <a class="card-source" href="https://www.tiktok.com/@rare_gemz/video/7581842788959063298" target="_blank" rel="noopener">@rare_gemz ↗</a>
+        <a class="card-source" href="https://www.tiktok.com/@mr.leo.2.0/video/7585693899969137951" target="_blank" rel="noopener">@mr.leo.2.0 ↗</a>
+      </article>
+      <article class="card">
+        <div class="card-eyebrow">
+          <span class="ts">Wed 6:01 PM</span>
+        </div>
+        <h2 class="card-title">"Okay wow, transcending the game" — Drake's deadpan Nike-ad line is spreading fast on TikTok</h2>
+        <p class="card-hook">Creators are applying Drake's over-the-top hype-man delivery to the most mundane objects for comedic contrast (50,000+ videos on one version of the sound already) — still purely TikTok-native, no mainstream news pickup yet.</p>
+        <a class="card-source" href="https://www.bevyl.ai/trends/okay-wow-transcending-the-game" target="_blank" rel="noopener">Bevyl ↗</a>
+      </article>
+      <article class="card">
+        <div class="card-eyebrow">
+          <span class="ts">Wed 5:31 PM</span>
+        </div>
+        <h2 class="card-title">Totality is happening right now — the only total solar eclipse of 2026 is crossing Greenland, Iceland &amp; Spain this hour</h2>
+        <p class="card-hook">Every outlet is running live "few minutes to totality" coverage this exact hour. Different cut than the morning eclipse post — this one's a fake breaking-news field report. Hold the phone like a mic, breathless reporter voice, duet the real eclipse livestream b-roll behind you: "While the world's watching the sky, we're on the ground for the story that actually matters — for the next 90 seconds, every fish on Earth thinks it's dusk and it's dinner time." Fake chyron: "TACKLEBOX NEWS: EXCLUSIVE COVERAGE." Leans on real angler folklore that fish feed harder when it suddenly goes dark mid-day. Just a phone, a straight face, and the livestream to duet — shoot it in the next few minutes while totality's still the biggest thing on every feed.</p>
+        <a class="card-source" href="https://www.cbsnews.com/news/total-solar-eclipse-august-12-2026/" target="_blank" rel="noopener">CBS News ↗</a>
+      </article>
+      <article class="card">
+        <div class="card-eyebrow">
+          <span class="ts">Wed 5:04 PM</span>
+        </div>
+        <h2 class="card-title">"We Had ChatGPT Make Us a Script" is spreading fast on TikTok this week</h2>
+        <p class="card-hook">Creators prompt ChatGPT for a short, absurd scene, then perform it dead straight in one take — the comedy is unhinged AI dialogue delivered with a totally straight face. Prompt it live for "a dramatic two-person fishing scene where one guy accuses the other of stealing his spot on the pier, written like a soap opera," then perform both parts (turn 90° between lines, solo) or with one other person, on-screen text "we had ChatGPT write us a fishing scene." Zero props — just a phone, a free prompt, and a straight face.</p>
+        <a class="card-source" href="https://newengen.com/insights/august-tiktok-trends/" target="_blank" rel="noopener">newengen.com ↗</a>
+      </article>
+      <article class="card">
+        <div class="card-eyebrow">
+          <span class="ts">Wed 4:33 PM</span>
+        </div>
+        <h2 class="card-title">A truck spilling fish across a highway is basically its own viral genre right now — latest one hit Rewari, India this morning</h2>
+        <p class="card-hook">A pickup truck flipped on the Delhi-Jaipur Highway today, scattering hundreds of fish across the road — the newest entry in a whole recurring genre of "truck dumps fish everywhere" viral clips (Alaska's Seward Highway had a near-identical salmon spill in July). Duet/stitch the real footage with a dead-serious breaking-news-anchor voiceover: "reports of an unmanned, unsupervised, fully-stocked fishing hole just... appearing on a public highway" — playing the chaos of people scooping up free fish as the greatest fishing opportunity ever, wasted because you weren't there. Caption: "the only time fishing's ever been easy and I missed it." Just a phone and a voiceover over existing viral clips — and since this keeps happening, it's a genre worth revisiting.</p>
+        <a class="card-source" href="https://www.tribuneindia.com/news/haryana/fish-spills-out-on-highway-in-rewari-after-pickup-truck-overturns" target="_blank" rel="noopener">Tribune India ↗</a>
+      </article>
+      <article class="card">
+        <div class="card-eyebrow">
+          <span class="ts">Wed 4:01 PM</span>
+        </div>
+        <h2 class="card-title">"Quiet on the Creek" glow-up transition audio is TikTok's biggest sound this week — and it's literally about fishing</h2>
+        <p class="card-hook">Saucy Santana's "used to go fishin' when I was a lil girl, gotta be real quiet on the creek" is the go-to glow-up transition sound right now. Play it straight, then subvert it: old blurry childhood-fishing photo on the setup line, then the beat drops into present-day Tacklebox holding up the exact same tiny, unimpressive fish with the same deadpan face — zero glow-up, that's the joke. Just a phone, one old photo, and the trending audio.</p>
+        <a class="card-source" href="https://www.xxlmag.com/saucy-santana-quiet-on-the-creek/" target="_blank" rel="noopener">XXL Mag ↗</a>
+      </article>
+      <article class="card">
+        <div class="card-eyebrow">
+          <span class="ts">Wed 3:31 PM</span>
+        </div>
+        <h2 class="card-title">"Pics I feel weirdly pretty in" transition trend is running hot on TikTok this week</h2>
+        <p class="card-hook">Parody it as "catches I feel weirdly proud of" — a fast carousel cut to the trending "Mind Blank" transition sound, flipping through objectively unimpressive fishing moments played as trophy shots: a 3-inch bluegill held up like a marlin, a boot pulled from the lake, a hook stuck in your own hat, a blurry "proof" shot of the one that got away. Slots straight into a format people are already scrolling — no real trophy fish required, shootable same-day from old footage or staged in the yard.</p>
+        <a class="card-source" href="https://newengen.com/insights/august-tiktok-trends/" target="_blank" rel="noopener">newengen.com ↗</a>
+      </article>
+      <article class="card">
+        <div class="card-eyebrow">
+          <span class="ts">Wed 2:17 PM</span>
+        </div>
+        <h2 class="card-title">"Suspect Challenge" is trending again on TikTok today</h2>
+        <p class="card-hook">Mock police "suspect description" narrated over someone jogging away — do it tackle-box style: "Suspect last seen sprinting from the boat ramp, vest covered in three-day-old bait, believed to be armed with a rod he still can't cast, last spotted blaming the fish for his own bad knot." Solo voiceover or duo with a fishing buddy. Proven trending format, rides existing algorithm momentum.</p>
+        <a class="card-source" href="https://www.today.com/life/suspect-challenge-tiktok-rcna178814" target="_blank" rel="noopener">TODAY.com ↗</a>
+      </article>
+      <article class="card">
+        <div class="card-eyebrow">
+          <span class="ts">Wed 8:26 AM</span>
+        </div>
+        <h2 class="card-title">Total solar eclipse sweeps Greenland → Iceland → Spain today, NASA livestreaming totality</h2>
+        <p class="card-hook">Duet/stitch NASA's emotional "instant chills" eclipse reactions against Tacklebox's own deadpan big moment (landing a fish, freeing a snagged lure). Caption: "me witnessing a once-in-a-lifetime celestial event" vs. "me witnessing [mundane Tacklebox chaos]." No eclipse footage needed — just ride today's biggest live news event.</p>
+        <a class="card-source" href="https://www.space.com/news/live/total-solar-eclipse-aug-12-2026-live-updates-1-day-until-totality-what-you-need-to-know" target="_blank" rel="noopener">Space.com ↗</a>
+      </article>
+      <!-- ENTRIES:END -->
+    </div>
+  </main>
+
+  <footer class="note">
+    Reeled in automatically every 30 minutes. Full history also logged in
+    Tacklebox Content Ideas.md.
+  </footer>
+</div>
